@@ -11,7 +11,13 @@
 			"name": "API key",
 			"description": "Go to DLVN web > Setting to obtain an API key",
 			"type": "string",
-			"default":  ""
+			"default": ""
+		},
+		"API url": {
+			"name": "API url",
+			"description": "For development purpose only",
+			"type": "string",
+			"default": "https://dlvnapi-nampe.koyeb.app"
 		}
 	}
 }
