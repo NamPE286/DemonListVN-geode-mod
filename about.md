@@ -1,3 +1,3 @@
-# Template Mod
+# Demon List VN
 
-Edit about.md to change this
+Helper mod for Demon List VN website
