@@ -1,17 +1,24 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
-#include "lib/Client.hpp"
+#include "lib/AttemptCounter.hpp"
+#include "lib/DeathCounter.hpp"
 
 using namespace geode::prelude;
 
 class $modify(DTPlayLayer, PlayLayer) {
-	size_t attemptCount = 0;
 	bool hasRespawned = false;
+	AttemptCounter attemptCounter;
+	DeathCounter deathCounter;
 
-	bool init(GJGameLevel * level, bool p1, bool p2) {
+	bool init(GJGameLevel* level, bool p1, bool p2) {
 		if (!PlayLayer::init(level, p1, p2)) {
 			return false;
 		}
+
+		int id = level->m_levelID.value();
+		auto best = level->m_normalPercent.value();
+
+	 	m_fields->deathCounter = DeathCounter(id, best >= 100);
 
 		return true;
 	}
@@ -28,7 +35,11 @@ class $modify(DTPlayLayer, PlayLayer) {
 		}
 
 		m_fields->hasRespawned = false;
-		m_fields->attemptCount++;
+		m_fields->attemptCounter.add();
+
+		if (!m_level->isPlatformer()) {
+			m_fields->deathCounter.add(this->getCurrentPercentInt());
+		}
     }
 
 	void resetLevel() {
@@ -39,6 +50,8 @@ class $modify(DTPlayLayer, PlayLayer) {
 
 	void onQuit() {
 		PlayLayer::onQuit();
-		Client::submitAttempt(m_fields->attemptCount);
+		
+		m_fields->attemptCounter.submit();
+		m_fields->deathCounter.submit();
 	}
 };
