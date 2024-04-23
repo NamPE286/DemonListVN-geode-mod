@@ -1,11 +1,15 @@
 {
-	"geode": "2.0.0-beta.24",
-	"gd": "2.204",
+	"geode": "2.0.0-beta.25",
+	"gd": {
+		"win": "*",
+		"android": "*"
+	},
 	"version": "v1.0.1",
 	"id": "nampe.demonlistvn",
 	"name": "Demon List VN",
 	"developer": "NamPE",
 	"description": "Demon list VN helper mod",
+	"repository": "https://github.com/NamPE286/DemonListVN-geode-mod",
 	"settings": {
 		"API key": {
 			"name": "API key",
