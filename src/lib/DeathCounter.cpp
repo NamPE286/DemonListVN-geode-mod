@@ -20,7 +20,7 @@ void DeathCounter::submit() {
 	using namespace geode::prelude;
 
 	auto APIKey = geode::prelude::Mod::get()->getSettingValue<std::string>("API key");
-	const std::string APIUrl = "https://dlvnapi-nampe.koyeb.app";
+	const std::string APIUrl = "https://api.demonlistvn.com";
 	std::string urlPath = "/deathCount/" + std::to_string(deathData.levelID) + "/" + deathData.serialize();
 
 	web::AsyncWebRequest()

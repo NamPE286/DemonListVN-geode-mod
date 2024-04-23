@@ -10,7 +10,7 @@ void AttemptCounter::submit() {
 	using namespace geode::prelude;
 
 	auto APIKey = Mod::get()->getSettingValue<std::string>("API key");
-	const std::string APIUrl = "https://dlvnapi-nampe.koyeb.app";
+	const std::string APIUrl = "https://api.demonlistvn.com";
 	std::string urlPath = "/player/heatmap/" + std::to_string(cnt);
 
 	web::AsyncWebRequest()
