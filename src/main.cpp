@@ -37,7 +37,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 		m_fields->hasRespawned = false;
 		m_fields->attemptCounter.add();
 
-		if (!m_level->isPlatformer()) {
+		if (!m_level->isPlatformer() && !m_isPracticeMode) {
 			m_fields->deathCounter.add(this->getCurrentPercentInt());
 		}
     }
