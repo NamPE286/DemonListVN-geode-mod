@@ -77,7 +77,7 @@ public:
 		int id = sender->getTag();
 		std::string url = "https://demonlistvn.com/level/" + std::to_string(id);
 
-		ShellExecute(0, 0, url.c_str(), 0, 0, SW_SHOW);
+		web::openLinkInBrowser(url);
 	}
 
 	CCMenu* create(std::vector<std::string> labels, GJGameLevel* level, CCLayer* layer) {
