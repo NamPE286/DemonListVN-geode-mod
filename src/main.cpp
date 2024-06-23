@@ -7,13 +7,13 @@
 
 using namespace geode::prelude;
 
+EventListener<web::WebTask> attemptCounterListener, deathCounterListener;
 
 class $modify(DTPlayLayer, PlayLayer) {
 	struct Fields {
 		bool hasRespawned = false;
 		AttemptCounter attemptCounter;
 		DeathCounter deathCounter;
-		EventListener<web::WebTask> attemptCounterListener, deathCounterListener;
 	};
 
 	bool init(GJGameLevel * level, bool p1, bool p2) {
@@ -57,8 +57,8 @@ class $modify(DTPlayLayer, PlayLayer) {
 	void onQuit() {
 		PlayLayer::onQuit();
 
-		m_fields->attemptCounter.submit(&(m_fields->attemptCounterListener));
-		m_fields->deathCounter.submit(&(m_fields->deathCounterListener));
+		m_fields->attemptCounter.submit(&(attemptCounterListener));
+		m_fields->deathCounter.submit(&(deathCounterListener));
 	}
 };
 
