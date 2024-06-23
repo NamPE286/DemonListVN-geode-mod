@@ -137,35 +137,44 @@ class $modify(LevelInfoLayer) {
 		this->addChild(loadingLabel);
 
 		m_fields->m_listener.bind([this, level, loadingLabel](web::WebTask::Event* e) {
-			if (web::WebResponse* res = e->getValue()) {
+			try {
 				if (this == nullptr) {
 					return;
 				}
 
-				loadingLabel->removeFromParent();
-				auto resJson = res->json().unwrap();
+				if (web::WebResponse* res = e->getValue()) {
+					loadingLabel->removeFromParent();
+					auto resJson = res->json().unwrap();
 
-				if (resJson["rating"].is_number() && resJson["flPt"].is_number()) {
-					std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
-					std::string fl = "FL: " + std::to_string(resJson["flPt"].as_int()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
+					if (resJson["rating"].is_number() && resJson["flPt"].is_number()) {
+						std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
+						std::string fl = "FL: " + std::to_string(resJson["flPt"].as_int()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
 
-					auto btn = ButtonCreator().create({ dl, fl }, level, this);
+						auto btn = ButtonCreator().create({ dl, fl }, level, this);
 
-					this->addChild(btn);
+						this->addChild(btn);
+					}
+					else if (resJson["rating"].is_number()) {
+						std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
+						auto btn = ButtonCreator().create({ dl }, level, this);
+
+						this->addChild(btn);
+					}
+					else if (resJson["flPt"].is_number()) {
+						std::string fl = "FL: " + std::to_string(resJson["flPt"].as_double()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
+						auto btn = ButtonCreator().create({ fl }, level, this);
+
+						this->addChild(btn);
+					}
 				}
-				else if (resJson["rating"].is_number()) {
-					std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
-					auto btn = ButtonCreator().create({ dl }, level, this);
-
-					this->addChild(btn);
+				else if (e->isCancelled()) {
+					loadingLabel->removeFromParent();
 				}
-				else if (resJson["flPt"].is_number()) {
-					std::string fl = "FL: " + std::to_string(resJson["flPt"].as_double()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
-					auto btn = ButtonCreator().create({ fl }, level, this);
-
-					this->addChild(btn);
+			} catch(...) {
+				if (this == nullptr) {
+					return;
 				}
-			} else if (e->isCancelled()) {
+
 				loadingLabel->removeFromParent();
 			}
 		});
