@@ -7,10 +7,14 @@
 
 using namespace geode::prelude;
 
+
 class $modify(DTPlayLayer, PlayLayer) {
-	bool hasRespawned = false;
-	AttemptCounter attemptCounter;
-	DeathCounter deathCounter;
+	struct Fields {
+		bool hasRespawned = false;
+		AttemptCounter attemptCounter;
+		DeathCounter deathCounter;
+		EventListener<web::WebTask> attemptCounterListener, deathCounterListener;
+	};
 
 	bool init(GJGameLevel * level, bool p1, bool p2) {
 		if (!PlayLayer::init(level, p1, p2)) {
@@ -53,8 +57,8 @@ class $modify(DTPlayLayer, PlayLayer) {
 	void onQuit() {
 		PlayLayer::onQuit();
 
-		m_fields->attemptCounter.submit();
-		m_fields->deathCounter.submit();
+		m_fields->attemptCounter.submit(&(m_fields->attemptCounterListener));
+		m_fields->deathCounter.submit(&(m_fields->deathCounterListener));
 	}
 };
 
@@ -114,6 +118,10 @@ public:
 };
 
 class $modify(LevelInfoLayer) {
+	struct Fields {
+		EventListener<web::WebTask> m_listener;
+	};
+
 	bool init(GJGameLevel* level, bool a) {
 		if (!LevelInfoLayer::init(level, a)) {
 			return false;
@@ -128,34 +136,42 @@ class $modify(LevelInfoLayer) {
 
 		this->addChild(loadingLabel);
 
-		web::AsyncWebRequest()
-			.fetch("https://api.demonlistvn.com/level/" + std::to_string(id))
-			.json()
-			.then([this, level, loadingLabel](matjson::Value& res) {
-				loadingLabel->removeFromParent();
+		m_fields->m_listener.bind([this, level, loadingLabel](web::WebTask::Event* e) {
+			if (web::WebResponse* res = e->getValue()) {
+				if (this == nullptr) {
+					return;
+				}
 
-				if (res["rating"].is_number() && res["flPt"].is_number()) {
-					std::string dl = "DL: " + std::to_string(res["rating"].as_int()) + " (#" + std::to_string(res["dlTop"].as_int()) + ")";
-					std::string fl = "FL: " + std::to_string(res["flPt"].as_int()) + " (#" + std::to_string(res["flTop"].as_int()) + ")";
+				loadingLabel->removeFromParent();
+				auto resJson = res->json().unwrap();
+
+				if (resJson["rating"].is_number() && resJson["flPt"].is_number()) {
+					std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
+					std::string fl = "FL: " + std::to_string(resJson["flPt"].as_int()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
 
 					auto btn = ButtonCreator().create({ dl, fl }, level, this);
 
 					this->addChild(btn);
-				} else if (res["rating"].is_number()) {
-					std::string dl = "DL: " + std::to_string(res["rating"].as_int()) + " (#" + std::to_string(res["dlTop"].as_int()) + ")";
+				}
+				else if (resJson["rating"].is_number()) {
+					std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
 					auto btn = ButtonCreator().create({ dl }, level, this);
 
 					this->addChild(btn);
-				} else if (res["flPt"].is_number()) {
-					std::string fl = "FL: " + std::to_string(res["flPt"].as_double()) + " (#" + std::to_string(res["flTop"].as_int()) + ")";
+				}
+				else if (resJson["flPt"].is_number()) {
+					std::string fl = "FL: " + std::to_string(resJson["flPt"].as_double()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
 					auto btn = ButtonCreator().create({ fl }, level, this);
 
 					this->addChild(btn);
 				}
-			})
-			.expect([loadingLabel](std::string const& error) {
+			} else if (e->isCancelled()) {
 				loadingLabel->removeFromParent();
-			});
+			}
+		});
+
+		web::WebRequest req = web::WebRequest();
+		m_fields->m_listener.setFilter(req.get("https://api.demonlistvn.com/level/" + std::to_string(id)));
 
 		return true;
 	}
