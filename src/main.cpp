@@ -146,22 +146,23 @@ class $modify(LevelInfoLayer) {
 					loadingLabel->removeFromParent();
 					auto resJson = res->json().unwrap();
 
-					if (resJson["rating"].is_number() && resJson["flPt"].is_number()) {
-						std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
-						std::string fl = "FL: " + std::to_string(resJson["flPt"].as_int()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
+					if (resJson["rating"].isNumber() && resJson["flPt"].isNumber()) {
+						auto tmp = resJson["rating"].asInt();
+						std::string dl = "DL: " + std::to_string(resJson["rating"].asInt().unwrap()) + " (#" + std::to_string(resJson["dlTop"].asInt().unwrap()) + ")";
+						std::string fl = "FL: " + std::to_string(resJson["flPt"].asInt().unwrap()) + " (#" + std::to_string(resJson["flTop"].asInt().unwrap()) + ")";
 
 						auto btn = ButtonCreator().create({ dl, fl }, level, this);
 
 						this->addChild(btn);
 					}
-					else if (resJson["rating"].is_number()) {
-						std::string dl = "DL: " + std::to_string(resJson["rating"].as_int()) + " (#" + std::to_string(resJson["dlTop"].as_int()) + ")";
+					else if (resJson["rating"].isNumber()) {
+						std::string dl = "DL: " + std::to_string(resJson["rating"].asInt().unwrap()) + " (#" + std::to_string(resJson["dlTop"].asInt().unwrap()) + ")";
 						auto btn = ButtonCreator().create({ dl }, level, this);
 
 						this->addChild(btn);
 					}
-					else if (resJson["flPt"].is_number()) {
-						std::string fl = "FL: " + std::to_string(resJson["flPt"].as_double()) + " (#" + std::to_string(resJson["flTop"].as_int()) + ")";
+					else if (resJson["flPt"].isNumber()) {
+						std::string fl = "FL: " + std::to_string(resJson["flPt"].asDouble().unwrap()) + " (#" + std::to_string(resJson["flTop"].asInt().unwrap()) + ")";
 						auto btn = ButtonCreator().create({ fl }, level, this);
 
 						this->addChild(btn);
@@ -171,10 +172,6 @@ class $modify(LevelInfoLayer) {
 					loadingLabel->removeFromParent();
 				}
 			} catch(...) {
-				if (this == nullptr) {
-					return;
-				}
-
 				loadingLabel->removeFromParent();
 			}
 		});
