@@ -11,11 +11,8 @@ EventSubmitter::EventSubmitter(int levelID):
 	std::string APIKey = geode::prelude::Mod::get()->getSettingValue<std::string>("API key");
 
 	getListener.bind([this](web::WebTask::Event *e) {
-		try {
-			if (web::WebResponse *res = e->getValue()) {
-				this->inEvent.store(res->ok());
-			}
-		} catch (...) {
+		if (web::WebResponse *res = e->getValue()) {
+			inEvent.store(res->ok());
 		}
 		});
 
@@ -29,7 +26,7 @@ void EventSubmitter::submit() {
 	}
 
 	web::WebRequest req = web::WebRequest();
-	std::string url = "https://api.demonlistvn.com/event/submitLevel/" + std::to_string(levelID) + "?progress=" + std::to_string(best);
+	std::string url = "https://api.demonlistvn.com/event/submitLevel/" + std::to_string(levelID) + "?progress=" + std::to_string(best) + "&password=69229623652108781802661011115864";
 	std::string APIKey = geode::prelude::Mod::get()->getSettingValue<std::string>("API key");
 
 	req.header("Authorization", "Bearer " + APIKey);

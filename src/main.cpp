@@ -55,8 +55,9 @@ class $modify(DTPlayLayer, PlayLayer) {
 	void levelComplete() {
 		PlayLayer::levelComplete();
 
-		geode::log::info("done");
-		m_fields->eventSubmitter->record(100);
+		if (!m_isPracticeMode) {
+			m_fields->eventSubmitter->record(100);
+		}
 	}
 
 	void resetLevel() {
