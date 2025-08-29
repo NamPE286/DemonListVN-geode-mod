@@ -1,11 +1,21 @@
 #include "EventSubmitter.hpp"
 
-EventSubmitter::EventSubmitter() {}
+EventSubmitter::EventSubmitter(int levelID) {
+	// TODO: Check if level is in an active event
+}
 
 void EventSubmitter::submit() {
-	// TODO
+	// TODO: Submit to event
 }
 
 void EventSubmitter::record(int progress) {
-	// TODO
+	if (progress <= best) {
+		return;
+	}
+
+	best = progress;
+
+	if (inEvent) {
+		submit();
+	}
 }
