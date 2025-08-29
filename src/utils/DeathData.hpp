@@ -1,5 +1,4 @@
-#ifndef DEATH_DATA_HEADER
-#define DEATH_DATA_HEADER
+#pragma once
 
 class DeathData {
 public:
@@ -14,5 +13,3 @@ public:
 	bool isCompleted();
 	void setCompleted();
 };
-
-#endif

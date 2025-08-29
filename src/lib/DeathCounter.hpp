@@ -1,7 +1,8 @@
+#pragma once
+
 #include "../utils/DeathData.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/utils/web.hpp>
-#include <Geode/Geode.hpp>
 
 class DeathCounter {
 private:

@@ -1,6 +1,7 @@
+#pragma once
+
 #include <Geode/Geode.hpp>
 #include <Geode/utils/web.hpp>
-#include <Geode/Geode.hpp>
 
 class AttemptCounter {
 private:
