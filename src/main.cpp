@@ -157,6 +157,11 @@ class $modify(LevelInfoLayer) {
 
 				if (web::WebResponse* res = e->getValue()) {
 					loadingLabel->removeFromParent();
+
+					if (!res->ok()) {
+						return;
+					}
+
 					auto resJson = res->json().unwrap();
 
 					if (resJson["rating"].isNumber() && resJson["flPt"].isNumber()) {
