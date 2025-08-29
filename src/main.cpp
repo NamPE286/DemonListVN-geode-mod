@@ -47,7 +47,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 
 		if (!m_level->isPlatformer() && !m_isPracticeMode) {
 			m_fields->deathCounter.add(this->getCurrentPercentInt());
-			m_fields->eventSubmitter->record(this->getCurrentPercentInt());
+			m_fields->eventSubmitter->record(this->getCurrentPercent());
 		}
 	}
 

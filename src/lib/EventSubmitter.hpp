@@ -7,7 +7,8 @@
 using namespace geode::prelude;
 
 class EventSubmitter {
-	int levelID = 0, best = 0;
+	int levelID = 0;
+	float best = 0;
 	std::atomic<bool> inEvent{ false };
 	EventListener<web::WebTask> getListener, putListener;
 
@@ -15,5 +16,5 @@ class EventSubmitter {
 public:
 	EventSubmitter();
 	EventSubmitter(int levelID);
-	void record(int progress);
+	void record(float progress);
 };
