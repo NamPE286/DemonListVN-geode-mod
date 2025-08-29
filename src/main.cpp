@@ -1,9 +1,10 @@
 #include <Geode/Geode.hpp>
 #include <Geode/utils/web.hpp>
-#include <Geode/modify/PlayLayer.hpp>
-#include <Geode/modify/LevelInfoLayer.hpp>
+#include <Geode/modify/PlayLayer.hpp> // DO NOT REMOVE
+#include <Geode/modify/LevelInfoLayer.hpp> // DO NOT REMOVE
 #include "lib/AttemptCounter.hpp"
 #include "lib/DeathCounter.hpp"
+#include "lib/EventSubmitter.hpp"
 
 using namespace geode::prelude;
 
@@ -14,8 +15,8 @@ class $modify(DTPlayLayer, PlayLayer) {
 		bool hasRespawned = false;
 		AttemptCounter attemptCounter;
 		DeathCounter deathCounter;
+		EventSubmitter* eventSubmitter = nullptr;
 	};
-
 	bool init(GJGameLevel * level, bool p1, bool p2) {
 		if (!PlayLayer::init(level, p1, p2)) {
 			return false;
@@ -25,6 +26,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 		auto best = level->m_normalPercent.value();
 
 		m_fields->deathCounter = DeathCounter(id, best >= 100);
+		m_fields->eventSubmitter = new EventSubmitter(id);
 
 		return true;
 	}
@@ -45,6 +47,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 
 		if (!m_level->isPlatformer() && !m_isPracticeMode) {
 			m_fields->deathCounter.add(this->getCurrentPercentInt());
+			m_fields->eventSubmitter->record(this->getCurrentPercentInt());
 		}
 	}
 
@@ -59,6 +62,8 @@ class $modify(DTPlayLayer, PlayLayer) {
 
 		m_fields->attemptCounter.submit(&(attemptCounterListener));
 		m_fields->deathCounter.submit(&(deathCounterListener));
+
+		delete m_fields->eventSubmitter;
 	}
 };
 
