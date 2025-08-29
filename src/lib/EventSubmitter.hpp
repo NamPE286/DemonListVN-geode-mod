@@ -15,6 +15,7 @@ class EventSubmitter {
 	void submit();
 public:
 	EventSubmitter();
+	~EventSubmitter();
 	EventSubmitter(int levelID);
 	void record(float progress);
 };

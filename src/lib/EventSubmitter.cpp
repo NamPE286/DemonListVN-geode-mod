@@ -4,6 +4,11 @@
 
 EventSubmitter::EventSubmitter() {}
 
+EventSubmitter::~EventSubmitter() {
+	getListener.disable();
+	putListener.disable();
+}
+
 EventSubmitter::EventSubmitter(int levelID): levelID(levelID) {
 	web::WebRequest req = web::WebRequest();
 	std::string url = "https://api.demonlistvn.com/level/" + std::to_string(levelID) + "/inEvent";
