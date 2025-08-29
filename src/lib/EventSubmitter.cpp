@@ -4,8 +4,7 @@
 
 EventSubmitter::EventSubmitter() {}
 
-EventSubmitter::EventSubmitter(int levelID):
-	levelID(levelID), getListener(getListener) {
+EventSubmitter::EventSubmitter(int levelID): levelID(levelID) {
 	web::WebRequest req = web::WebRequest();
 	std::string url = "https://api.demonlistvn.com/level/" + std::to_string(levelID) + "/inEvent";
 	std::string APIKey = geode::prelude::Mod::get()->getSettingValue<std::string>("API key");

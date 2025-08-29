@@ -15,7 +15,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 		bool hasRespawned = false;
 		AttemptCounter attemptCounter;
 		DeathCounter deathCounter;
-		EventSubmitter* eventSubmitter = nullptr;
+		EventSubmitter *eventSubmitter;
 	};
 
 	bool init(GJGameLevel * level, bool p1, bool p2) {
