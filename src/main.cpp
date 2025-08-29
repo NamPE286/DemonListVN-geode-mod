@@ -17,6 +17,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 		DeathCounter deathCounter;
 		EventSubmitter* eventSubmitter = nullptr;
 	};
+
 	bool init(GJGameLevel * level, bool p1, bool p2) {
 		if (!PlayLayer::init(level, p1, p2)) {
 			return false;
@@ -49,6 +50,13 @@ class $modify(DTPlayLayer, PlayLayer) {
 			m_fields->deathCounter.add(this->getCurrentPercentInt());
 			m_fields->eventSubmitter->record(this->getCurrentPercent());
 		}
+	}
+
+	void levelComplete() {
+		PlayLayer::levelComplete();
+
+		geode::log::info("done");
+		m_fields->eventSubmitter->record(100);
 	}
 
 	void resetLevel() {
