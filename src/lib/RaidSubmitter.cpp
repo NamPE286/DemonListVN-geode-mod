@@ -1,18 +1,18 @@
-#include "EventSubmitter.hpp"
+#include "RaidSubmitter.hpp"
 #include <Geode/Geode.hpp>
 #include <Geode/utils/web.hpp>
 #include "../common.hpp"
 
-EventSubmitter::EventSubmitter() {}
+RaidSubmitter::RaidSubmitter() {}
 
-EventSubmitter::~EventSubmitter() {
+RaidSubmitter::~RaidSubmitter() {
 	getListener.disable();
 	putListener.disable();
 }
 
-EventSubmitter::EventSubmitter(int levelID): levelID(levelID) {
+RaidSubmitter::RaidSubmitter(int levelID): levelID(levelID) {
 	web::WebRequest req = web::WebRequest();
-	std::string url = API_URL + "/level/" + std::to_string(levelID) + "/inEvent";
+	std::string url = API_URL + "/level/" + std::to_string(levelID) + "/inEvent?type=raid";
 	std::string APIKey = geode::prelude::Mod::get()->getSettingValue<std::string>("API key");
 
 	getListener.bind([this](web::WebTask::Event *e) {
@@ -25,7 +25,7 @@ EventSubmitter::EventSubmitter(int levelID): levelID(levelID) {
 	getListener.setFilter(req.get(url));
 }
 
-void EventSubmitter::submit() {
+void RaidSubmitter::submit() {
 	if (!inEvent.load()) {
 		return;
 	}
@@ -38,11 +38,7 @@ void EventSubmitter::submit() {
 	putListener.setFilter(req.put(url));
 }
 
-void EventSubmitter::record(float progress) {
-	if (progress <= best) {
-		return;
-	}
-
+void RaidSubmitter::record(float progress) {
 	best = progress;
 
 	submit();
