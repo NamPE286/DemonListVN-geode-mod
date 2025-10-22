@@ -5,6 +5,7 @@
 #include "lib/AttemptCounter.hpp"
 #include "lib/DeathCounter.hpp"
 #include "lib/EventSubmitter.hpp"
+#include "common.hpp"
 
 using namespace geode::prelude;
 
@@ -196,7 +197,7 @@ class $modify(LevelInfoLayer) {
 		});
 
 		web::WebRequest req = web::WebRequest();
-		m_fields->m_listener.setFilter(req.get("https://api.demonlistvn.com/level/" + std::to_string(id)));
+		m_fields->m_listener.setFilter(req.get(API_URL + "/level/" + std::to_string(id)));
 
 		return true;
 	}
