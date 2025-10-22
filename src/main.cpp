@@ -5,6 +5,7 @@
 #include "lib/AttemptCounter.hpp"
 #include "lib/DeathCounter.hpp"
 #include "lib/EventSubmitter.hpp"
+#include "lib/RaidSubmitter.hpp"
 #include "common.hpp"
 
 using namespace geode::prelude;
@@ -17,6 +18,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 		AttemptCounter attemptCounter;
 		DeathCounter deathCounter;
 		EventSubmitter *eventSubmitter;
+		RaidSubmitter *raidSubmitter;
 	};
 
 	bool init(GJGameLevel * level, bool p1, bool p2) {
@@ -29,6 +31,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 
 		m_fields->deathCounter = DeathCounter(id, best >= 100);
 		m_fields->eventSubmitter = new EventSubmitter(id);
+		m_fields->raidSubmitter = new RaidSubmitter(id);
 
 		return true;
 	}
@@ -50,6 +53,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 		if (!m_level->isPlatformer() && !m_isPracticeMode) {
 			m_fields->deathCounter.add(this->getCurrentPercentInt());
 			m_fields->eventSubmitter->record(this->getCurrentPercent());
+			m_fields->raidSubmitter->record(this->getCurrentPercent());
 		}
 	}
 
@@ -58,6 +62,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 
 		if (!m_isPracticeMode) {
 			m_fields->eventSubmitter->record(100);
+			m_fields->raidSubmitter->record(100);
 		}
 	}
 
@@ -74,6 +79,7 @@ class $modify(DTPlayLayer, PlayLayer) {
 		m_fields->deathCounter.submit(&(deathCounterListener));
 
 		delete m_fields->eventSubmitter;
+		delete m_fields->raidSubmitter;
 	}
 };
 
