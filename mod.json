@@ -1,10 +1,10 @@
 {
-	"geode": "4.9.0",
+	"geode": "4.10.0",
 	"gd": {
 		"win": "*",
 		"android": "*"
 	},
-	"version": "3.1.4",
+	"version": "3.1.5",
 	"id": "nampe.demonlistvn",
 	"name": "Demon List VN",
 	"developer": "NamPE",

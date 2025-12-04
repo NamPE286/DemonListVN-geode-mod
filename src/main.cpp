@@ -100,7 +100,7 @@ class ButtonCreator {
 public:
 	void onButton(CCObject* sender) {
 		int id = sender->getTag();
-		std::string url = "https://demonlistvn.com/level/" + std::to_string(id);
+		std::string url = "https://demonlistvn.com/levels/" + std::to_string(id);
 
 		web::openLinkInBrowser(url);
 	}
@@ -203,7 +203,7 @@ class $modify(LevelInfoLayer) {
 		});
 
 		web::WebRequest req = web::WebRequest();
-		m_fields->m_listener.setFilter(req.get(API_URL + "/level/" + std::to_string(id)));
+		m_fields->m_listener.setFilter(req.get(API_URL + "/levels/" + std::to_string(id)));
 
 		return true;
 	}
