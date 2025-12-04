@@ -2,7 +2,9 @@
 	"geode": "4.10.0",
 	"gd": {
 		"win": "*",
-		"android": "*"
+		"android": "*",
+		"mac": "*",
+		"ios": "*"
 	},
 	"version": "3.1.5",
 	"id": "nampe.demonlistvn",
