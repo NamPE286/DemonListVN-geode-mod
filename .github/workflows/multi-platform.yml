@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "**"
+      - '**'
 
 jobs:
   build:
@@ -39,11 +39,10 @@ jobs:
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          bindings: geode-sdk/bindings
-          bindings-ref: main
           combine: true
           target: ${{ matrix.config.target }}
-
+          build-args: '--parallel 16'
+      
   package:
     name: Package builds
     runs-on: ubuntu-latest
